@@ -1,87 +1,84 @@
-# Image Classification SOTA  
+# Classroom-Inspired Multi-Mentor Distillation with Adaptive Learning Strategies
 
-`Image Classification SOTA` is an image classification toolbox based on PyTorch.
+This repository contains the code for the paper "Classroom-Inspired Multi-Mentor Distillation with Adaptive Learning Strategies" accepted at the 11th Intelligent Systems Conference 2025 (IntelliSys 2025).
 
-## Updates  
-### May 27, 2022  
-* Add knowledge distillation methods (KD and [DIST](https://github.com/hunto/DIST_KD)).  
+> [!NOTE]
+> **Acknowledgement** The source code is based on the [hunto/image_classification_sota](https://github.com/hunto/image_classification_sota) repository. We thank the authors for their work and for making their code publicly available.
 
-### March 24, 2022  
-* Support training strategies in DeiT (ViT).
+## Getting Started
 
-### March 11, 2022  
-* Release training code.
+Clone the repository into your local machine and install the required packages:
 
-## Supported Algorithms  
-### Structural Re-parameterization (Rep)  
-* DBB (CVPR 2021) [[paper]](https://arxiv.org/abs/2103.13425) [[original repo]](https://github.com/DingXiaoH/DiverseBranchBlock)
-* DyRep (CVPR 2022) [[README]](https://github.com/hunto/DyRep)
+```bash
+git clone https://github.com/saifkhichi96/classroom-kd.git
+cd classroom-kd
 
-### Knowledge Distillation (KD)  
-* KD [[paper]](https://arxiv.org/abs/1503.02531)  
-* DIST [[README]](https://github.com/hunto/DIST_KD) [[paper]](https://arxiv.org/abs/2205.10536)  
-
-## Requirements
-```
-torch>=1.0.1
-torchvision
+pip install -r requirements.txt
 ```
 
-## Getting Started  
-### Prepare datasets  
-It is recommended to symlink the dataset root to `image_classification_sota/data`. Then the file structure should be like  
+### Preparing Datasets
+
+Create a directory named `data` in the root of the repository and download the CIFAR-100 (and ImageNet, if needed) dataset into it The directory structure should look like this:
+
 ```
-image_classification_sota
-├── lib
-├── tools
-├── configs
-├── data
-│   ├── imagenet
+classroom-kd/
+├── configs/
+├── data/
+│   ├── imagenet/
 │   │   ├── meta
 │   │   ├── train
 │   │   ├── val
-│   ├── cifar
+│   ├── cifar/
 │   │   ├── cifar-10-batches-py
 │   │   ├── cifar-100-python
+├── lib/
+├── tools/
 ```
 
-### Training configurations  
-* `Strategies`: The training strategies are configured using yaml file or arguments. Examples are in `configs/strategies` directory.
+We provide the configuration files for our experiments in the [`configs/classroom/`](configs/classroom/) directory. This includes multiple classroom setups with CIFAR-100 and ImageNet datasets.
 
-### Train a model  
+### Training
 
-* Training with a single GPU  
-    ```shell
-    python tools/train.py -c ${CONFIG} --model ${MODEL} [optional arguments]
-    ```
+To train the model, you can use the following command:
 
-* Training with multiple GPUs
-    ```shell
-    sh tools/dist_train.sh ${GPU_NUM} ${CONFIG} ${MODEL} [optional arguments]
-    ```
+```bash
+python tools/train.py \
+  -c configs/classroom/efficientnet_ablation/1t5p.yaml \
+  --experiment experiments/efficient_ablation/1t5p \
+  --model cifar_MobileNetV2 \
+  --ask
+```
 
-* For slurm users
-    ```shell
-    sh tools/slurm_train.sh ${PARTITION} ${GPU_NUM} ${CONFIG} ${MODEL} [optional arguments]
-    ```
+Other options include:
+- `--ask` to activate asking module
+- `--ask_b` for ranking of type b
+- `--no_ask` to disable asking 
+- `--no_mentor` to disable mentoring module
+- `--dtkd_mentor` to replace mentoring module with dtkd
 
-**Examples**  
-* Train ResNet-50 on ImageNet
-    ```shell
-    sh tools/dist_train.sh 8 configs/strategies/resnet/resnet.yaml resnet50 --experiment imagenet_res50
-    ```
+For **peer pretraining**, use the following command:
 
-* Train MobileNetV2 on ImageNet
-    ```shell
-    sh tools/dist_train.sh 8 configs/strategies/MBV2/mbv2.yaml nas_model --model-config configs/models/MobileNetV2/MobileNetV2.yaml --experiment imagenet_mbv2
-    ```
+```bash
+python tools/train.py -c configs/classroom/trained_peers/mobv2/0t0p.yaml --model cifar_efficientnetb3 --experiment experiments/efficientnetb3_peer
+```
 
-* Train VGG-16 on CIFAR-10
-    ```shell
-    sh tools/dist_train.sh 1 configs/strategies/CIFAR/cifar.yaml nas_model --model-config configs/models/VGG/vgg16_cifar10.yaml --experiment cifar10_vgg16
-    ```
+To run the ablation study for the number of peers, use the following command:
 
-## Projects based on Image Classification SOTA  
-* [CVPR 2022] [DyRep](https://github.com/hunto/DyRep): Bootstrapping Training with Dynamic Re-parameterization
-* [NeurIPS 2022] [DIST](https://github.com/hunto/DIST_KD): Knowledge Distillation from A Stronger Teacher
-* [LightViT](https://github.com/hunto/LightViT): Towards Light-Weight Convolution-Free Vision Transformers
+```bash
+python tools/train.py -c configs/classroom/efficientnet_ablation/1t5p.yaml --model cifar_MobileNetV2 --ask --experiment experiments/efficient_ablation/1t5p
+```
+
+## Citation
+If this project or dataset proves helpful in your work, please cite:
+
+```bibtex
+@article{sarode2024classroom, 
+  title={Classroom-Inspired Multi-Mentor Distillation with Adaptive Learning Strategies}, 
+  author={Sarode, Shalini and Khan, Muhammad Saif Ullah and Shehzadi, Tahira and Stricker, Didier and Afzal, Muhammad Zeshan}, 
+  journal={arXiv preprint arXiv:2409.20237}, 
+  year={2024} 
+}
+```
+
+## License
+This project is released under the [CC-BY-NC-4.0 License](./LICENSE). Commercial use is prohibited, and appropriate attribution is required for research or educational applications.

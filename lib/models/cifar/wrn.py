@@ -141,6 +141,13 @@ def wrn_40_1(**kwargs):
     model = WideResNet(depth=40, widen_factor=1, **kwargs)
     return model
 
+def wrn_28_10(**kwargs):
+    model = WideResNet(depth=28, widen_factor=10, **kwargs)
+    return model
+
+def wrn_16_8(**kwargs):
+    model = WideResNet(depth=16, widen_factor=8, **kwargs)
+    return model
 
 def wrn_16_2(**kwargs):
     model = WideResNet(depth=16, widen_factor=2, **kwargs)

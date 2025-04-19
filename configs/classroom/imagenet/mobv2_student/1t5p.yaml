@@ -1,0 +1,9 @@
+# kd
+ori_loss_weight:  1.
+kd_loss_weight: 1.0
+peer_loss_weight: 1.
+kd: ask_t12
+teacher_model: ['tv_efficientnet_b3']
+teacher_pretrained: True
+peer_model: ['tv_squeezenet1_1','tv_mobilenet_v2','tv_regnet_y_400mf','tv_efficientnet_b0']
+peer_pretrained: True

@@ -1,0 +1,4 @@
+efficientnet_pytorch 
+torch
+torchvision
+timm

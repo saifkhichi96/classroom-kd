@@ -1,0 +1,6 @@
+{
+    "teachers": ["vit_teacher", "regnet_teacher"],
+    "students": ["mobilenet_student"],
+    "peers": ["regnet_peer"],
+    "num_classes" : 1000
+  }

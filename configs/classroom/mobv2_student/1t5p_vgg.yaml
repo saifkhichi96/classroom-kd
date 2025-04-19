@@ -1,0 +1,43 @@
+dataset: cifar100
+image_mean: [0.5071, 0.4867, 0.4408]
+image_std: [0.2675, 0.2565, 0.2761]
+aa: null
+batch_size: 64
+color_jitter: 0.0
+cutout_length: 0
+decay_by_epoch: True
+decay_epochs: 30
+decay_rate: 0.1
+drop: 0.0
+epochs: 240
+log_interval: 50
+lr: 0.01
+smoothing: 0.0
+min_lr: 1.0e-06
+model_ema: false
+model_ema_decay: 0.9998
+momentum: 0.9
+opt: sgd
+opt_betas: null
+opt_eps: 1.0e-08
+remode: const
+reprob: 0.0
+sched: step
+seed: 42
+warmup_epochs: 120
+warmup_lr: 0.05
+weight_decay: 5.0e-04
+workers: 4
+sgd_no_nesterov: True
+opt_no_filter: True
+
+# kd
+ori_loss_weight:  1.
+kd_loss_weight: 1.5
+peer_loss_weight: 2.
+kd: ask_t12
+teacher_model: ['cifar_vgg13']
+teacher_ckpt: ['/netscratch/sarode/Thesis/neurips24-classroom-learning/DIST_KD/classification/cifar_ckpts/vgg13_vanilla/ckpt_epoch_240.pth']
+peer_model: ['cifar_resnet8','cifar_resnet14','cifar_resnet20','cifar_ShuffleV1','cifar_ShuffleV2']
+peer_pretrained: True
+peer_ckpt: ['/netscratch/sarode/Thesis/neurips24-classroom-learning/DIST_KD/classification/experiments/r8_peer/best.pth.tar','/netscratch/sarode/Thesis/neurips24-classroom-learning/DIST_KD/classification/experiments/r14_peer/best.pth.tar','/netscratch/sarode/Thesis/neurips24-classroom-learning/DIST_KD/classification/experiments/r20_peer/best.pth.tar','/netscratch/sarode/Thesis/neurips24-classroom-learning/DIST_KD/classification/experiments/sv1_peer/best.pth.tar','/netscratch/sarode/Thesis/neurips24-classroom-learning/DIST_KD/classification/experiments/sv2_peer/best.pth.tar']
