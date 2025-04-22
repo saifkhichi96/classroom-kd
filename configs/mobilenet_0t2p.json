@@ -1,6 +1,0 @@
-{
-    "teachers": [],
-    "students": ["mobilenet_student"],
-    "peers": ["regnet_peer", "squeezenet_peer"],
-    "num_classes" : 1000
-  }

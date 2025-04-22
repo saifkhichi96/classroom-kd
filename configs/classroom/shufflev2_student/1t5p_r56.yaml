@@ -27,7 +27,7 @@ seed: 42
 warmup_epochs: 120
 warmup_lr: 0.05
 weight_decay: 5.0e-04
-workers: 4
+workers: 8
 sgd_no_nesterov: True
 opt_no_filter: True
 

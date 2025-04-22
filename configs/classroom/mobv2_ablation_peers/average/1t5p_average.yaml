@@ -27,7 +27,7 @@ seed: 42
 warmup_epochs: 120
 warmup_lr: 0.05
 weight_decay: 5.0e-04
-workers: 8
+workers: 4
 sgd_no_nesterov: True
 opt_no_filter: True
 
@@ -36,8 +36,8 @@ ori_loss_weight:  1.
 kd_loss_weight: 1.5
 peer_loss_weight: 2.
 kd: ask_t12
-teacher_model: ['cifar_ResNet50']
-teacher_ckpt: ['./cifar_ckpts/ResNet50_vanilla/ckpt_epoch_240.pth']
-peer_model: []
+teacher_model: ['cifar_ResNet18']
+teacher_ckpt: ['/netscratch/sarode/Thesis/neurips24-classroom-learning/DIST_KD/classification/experiments/swin_ask/best.pth.tar']
+peer_model: ['cifar_MobileNetV2','cifar_resnet14','cifar_ShuffleV2']
 peer_pretrained: True
-peer_ckpt: []
+peer_ckpt: ['/netscratch/sarode/Thesis/neurips24-classroom-learning/DIST_KD/classification/experiments/mob_na_np_t12/mob_0t0p_na/best.pth.tar','/netscratch/sarode/Thesis/neurips24-classroom-learning/DIST_KD/classification/experiments/r14_peer/best.pth.tar','/netscratch/sarode/Thesis/neurips24-classroom-learning/DIST_KD/classification/experiments/sv2_peer/best.pth.tar']

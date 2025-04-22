@@ -27,7 +27,7 @@ seed: 42
 warmup_epochs: 120
 warmup_lr: 0.05
 weight_decay: 5.0e-04
-workers: 4
+workers: 8
 sgd_no_nesterov: True
 opt_no_filter: True
 
@@ -35,9 +35,9 @@ opt_no_filter: True
 ori_loss_weight:  1.
 kd_loss_weight: 1.5
 peer_loss_weight: 2.
-kd: ask_t12
-teacher_model: ['cifar_vgg13']
-teacher_ckpt: ['/netscratch/sarode/Thesis/neurips24-classroom-learning/DIST_KD/classification/cifar_ckpts/vgg13_vanilla/ckpt_epoch_240.pth']
+kd: ask_t8
+teacher_model: ['cifar_ResNet50']
+teacher_ckpt: ['./cifar_ckpts/ResNet50_vanilla/ckpt_epoch_240.pth']
 peer_model: ['cifar_resnet8','cifar_resnet14','cifar_resnet20','cifar_ShuffleV1','cifar_ShuffleV2']
 peer_pretrained: True
 peer_ckpt: ['/netscratch/sarode/Thesis/neurips24-classroom-learning/DIST_KD/classification/experiments/r8_peer/best.pth.tar','/netscratch/sarode/Thesis/neurips24-classroom-learning/DIST_KD/classification/experiments/r14_peer/best.pth.tar','/netscratch/sarode/Thesis/neurips24-classroom-learning/DIST_KD/classification/experiments/r20_peer/best.pth.tar','/netscratch/sarode/Thesis/neurips24-classroom-learning/DIST_KD/classification/experiments/sv1_peer/best.pth.tar','/netscratch/sarode/Thesis/neurips24-classroom-learning/DIST_KD/classification/experiments/sv2_peer/best.pth.tar']

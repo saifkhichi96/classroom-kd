@@ -3,7 +3,7 @@ import torch
 import warnings
 from PIL import Image
 from torch.utils.data import Dataset
-
+import os
 try:
     import mc
     from .file_io import PetrelMCBackend
@@ -76,6 +76,31 @@ class ImageNetDataset(Dataset):
             img = Image.open(filename).convert('RGB')
 
         # transform
+        if self.transform is not None:
+            img = self.transform(img)
+        return img, cls
+
+
+class CifarDistillDataset(Dataset):
+    def __init__(self, root, transform=None):
+        self.root = root
+        self.transform = transform
+        self.metas = []
+        for class_name in os.listdir(root):
+            class_dir = os.path.join(root, class_name)
+            if os.path.isdir(class_dir):
+                for img_name in os.listdir(class_dir):
+                    if img_name.endswith(('.png', '.jpg', '.jpeg')):
+                        self.metas.append((os.path.join(class_dir, img_name), int(class_name)))
+        self.num = len(self.metas)
+
+    def __len__(self):
+        return self.num
+
+    def __getitem__(self, index):
+        filename, cls = self.metas[index]
+        img = Image.open(filename).convert('RGB')
+
         if self.transform is not None:
             img = self.transform(img)
         return img, cls

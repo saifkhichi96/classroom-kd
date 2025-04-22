@@ -1,7 +1,0 @@
-{
-    "teachers": [],
-    "students": ["mobilenet_student"],
-    "peers": [],
-    "num_classes" : 1000
-  }
-  

@@ -23,13 +23,13 @@ seed: 42
 warmup_epochs: 0
 warmup_lr: 0.2
 weight_decay: 1.0e-4
-workers: 8
+workers: 16
 # kd
 ori_loss_weight:  1.
 kd_loss_weight: 1.0
 peer_loss_weight: 1.
-kd: ask_t8
-teacher_model: ['timm_efficientnet_b3']
+kd: ask_t4
+teacher_model: ['tv_resnet50']
 teacher_pretrained: True
-peer_model: ['tv_squeezenet1_1','tv_mobilenet_v2','timm_regnety_320','timm_regnety_016']
+peer_model: ['tv_googlenet','tv_mobilenet_v2','tv_regnet_x_400mf','tv_densenet169']
 peer_pretrained: True

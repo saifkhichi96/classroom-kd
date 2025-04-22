@@ -3,7 +3,7 @@ import re
 import torch
 import torchvision.datasets as datasets
 
-from .dataset import ImageNetDataset
+from .dataset import ImageNetDataset, CifarDistillDataset
 from .dataloader import fast_collate, DataPrefetcher
 from .mixup import Mixup
 from . import transform
@@ -38,7 +38,7 @@ else:
 def build_dataloader(args):
     # pre-configuration for the dataset
     if args.dataset == 'imagenet':
-        args.data_path = 'data/imagenet' if args.data_path == '' else args.data_path
+        args.data_path = '/netscratch/sarode/Thesis/imagenet/' if args.data_path == '' else args.data_path
         args.num_classes = 1000
         args.input_shape = (3, 224, 224)
     elif args.dataset == 'cifar10':
@@ -49,13 +49,17 @@ def build_dataloader(args):
         args.data_path = 'data/cifar' if args.data_path == '' else args.data_path
         args.num_classes = 100
         args.input_shape = (3, 32, 32)
+    elif args.dataset == 'distill_cifar100':
+        args.data_path = './frepo_cifar100' if args.data_path == '' else args.data_path
+        args.num_classes = 100
+        args.input_shape = (3, 32, 32)
 
     # train
     if args.dataset == 'imagenet':
         train_transforms_l, train_transforms_r = transform.build_train_transforms(
             args.aa, args.color_jitter, args.reprob, args.remode, args.interpolation, args.image_mean, args.image_std)
         train_dataset = ImageNetDataset(
-            os.path.join(args.data_path, 'train'), os.path.join(args.data_path, 'meta/train.txt'), transform=train_transforms_l)
+            os.path.join(args.data_path, 'train'), os.path.join('/netscratch/sarode/Thesis/imagenet/', 'train.txt'), transform=train_transforms_l)
     elif args.dataset == 'cifar10':
         train_transforms_l, train_transforms_r = transform.build_train_transforms_cifar10(
             args.cutout_length, args.image_mean, args.image_std)
@@ -65,7 +69,12 @@ def build_dataloader(args):
         train_transforms_l, train_transforms_r = transform.build_train_transforms_cifar10(
             args.cutout_length, args.image_mean, args.image_std)
         train_dataset = datasets.CIFAR100(
-            root=args.data_path, train=True, download=True, transform=train_transforms_l)
+            root=args.data_path, train=True, download=False, transform=train_transforms_l)
+    elif args.dataset == 'distill_cifar100':
+        train_transforms_l, train_transforms_r = transform.build_train_transforms_cifar10(
+            args.cutout_length, args.image_mean, args.image_std)
+        train_dataset = CifarDistillDataset(
+            root=os.path.join(args.data_path, 'train_full'),transform=train_transforms_l)
 
     # mixup
     mixup_active = args.mixup > 0. or args.cutmix > 0. or args.cutmix_minmax is not None
@@ -84,13 +93,16 @@ def build_dataloader(args):
     # val
     if args.dataset == 'imagenet':
         val_transforms_l, val_transforms_r = transform.build_val_transforms(args.interpolation, args.image_mean, args.image_std)
-        val_dataset = ImageNetDataset(os.path.join(args.data_path, 'val'), os.path.join(args.data_path, 'meta/val.txt'), transform=val_transforms_l)
+        val_dataset = ImageNetDataset(os.path.join(args.data_path, 'val'), os.path.join('/netscratch/sarode/Thesis/imagenet/', 'val.txt'), transform=val_transforms_l)
     elif args.dataset == 'cifar10':
         val_transforms_l, val_transforms_r = transform.build_val_transforms_cifar10(args.image_mean, args.image_std)
         val_dataset = datasets.CIFAR10(root=args.data_path, train=False, download=True, transform=val_transforms_l)
     elif args.dataset == 'cifar100':
         val_transforms_l, val_transforms_r = transform.build_val_transforms_cifar10(args.image_mean, args.image_std)
-        val_dataset = datasets.CIFAR100(root=args.data_path, train=False, download=True, transform=val_transforms_l)
+        val_dataset = datasets.CIFAR100(root=args.data_path, train=False, download=False, transform=val_transforms_l)
+    elif args.dataset == 'distill_cifar100':
+        val_transforms_l, val_transforms_r = transform.build_val_transforms_cifar10(args.image_mean, args.image_std)
+        val_dataset = datasets.CIFAR100(root='data/cifar', train=False, download=False, transform=val_transforms_l)
 
     val_sampler = torch.utils.data.distributed.DistributedSampler(val_dataset, shuffle=False)
     val_loader = torch.utils.data.DataLoader(

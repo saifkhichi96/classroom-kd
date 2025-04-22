@@ -33,11 +33,10 @@ opt_no_filter: True
 
 # kd
 ori_loss_weight:  1.
-kd_loss_weight: 1.5
-peer_loss_weight: 2.
+kd_loss_weight: 1.
+peer_loss_weight: 1.
 kd: ask_t12
-teacher_model: ['cifar_ResNet50']
-teacher_ckpt: ['./cifar_ckpts/ResNet50_vanilla/ckpt_epoch_240.pth']
+teacher_model: ['cifar_wrn_40_2']
+teacher_ckpt: ['./cifar_ckpts/wrn_40_2_vanilla/ckpt_epoch_240.pth']
 peer_model: []
-peer_pretrained: True
 peer_ckpt: []

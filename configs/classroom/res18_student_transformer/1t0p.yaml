@@ -27,17 +27,17 @@ seed: 42
 warmup_epochs: 120
 warmup_lr: 0.05
 weight_decay: 5.0e-04
-workers: 8
+workers: 4
 sgd_no_nesterov: True
 opt_no_filter: True
 
 # kd
 ori_loss_weight:  1.
-kd_loss_weight: 1.5
-peer_loss_weight: 2.
+kd_loss_weight: 1.
+peer_loss_weight: 1.
 kd: ask_t12
-teacher_model: ['cifar_ResNet50']
-teacher_ckpt: ['./cifar_ckpts/ResNet50_vanilla/ckpt_epoch_240.pth']
+teacher_model: ['cifar_swin_t']
+teacher_pretrained: True
+teacher_ckpt: ['./cifar_ckpts/swin_t_vanilla/swin_tiny_patch4_window7_224_cifar100.pth']
 peer_model: []
-peer_pretrained: True
 peer_ckpt: []

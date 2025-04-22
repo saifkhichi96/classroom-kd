@@ -36,8 +36,5 @@ ori_loss_weight:  1.
 kd_loss_weight: 1.5
 peer_loss_weight: 2.
 kd: ask_t12
-teacher_model: ['cifar_ResNet50']
-teacher_ckpt: ['./cifar_ckpts/ResNet50_vanilla/ckpt_epoch_240.pth']
-peer_model: []
-peer_pretrained: True
-peer_ckpt: []
+teacher_model: ['cifar_ResNet18']
+teacher_ckpt: ['/netscratch/sarode/Thesis/neurips24-classroom-learning/DIST_KD/classification/experiments/swin_ask/best.pth.tar']

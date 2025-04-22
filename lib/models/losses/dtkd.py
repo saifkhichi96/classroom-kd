@@ -20,18 +20,23 @@ class KLDivergenceDTKD(nn.Module):
         loss_weight (float): Weight of loss. Defaults to 1.0.
     """
 
-    def __init__(self, tau=1.0, reduction="batchmean", adaptive=False):
+    def __init__(
+        self,
+        tau=1.0,
+        reduction='batchmean',adaptive=False
+    ):
         super(KLDivergenceDTKD, self).__init__()
         self.tau = tau
         self.adaptive = adaptive
+        self.alpha = 0.5
 
-        accept_reduction = {"none", "batchmean", "sum", "mean"}
-        assert reduction in accept_reduction, (
-            f"KLDivergence supports reduction {accept_reduction}, but gets {reduction}."
-        )
+        accept_reduction = {'none', 'batchmean', 'sum', 'mean'}
+        assert reduction in accept_reduction, \
+            f'KLDivergence supports reduction {accept_reduction}, ' \
+            f'but gets {reduction}.'
         self.reduction = reduction
 
-    def forward(self, preds_S, preds_T, tau_scale=1.0):
+    def forward(self, preds_S, preds_T,tau_scale = [1.0,1.0]):
         """Forward computation.
 
         Args:
@@ -44,17 +49,17 @@ class KLDivergenceDTKD(nn.Module):
             torch.Tensor: The calculated loss value.
         """
         preds_T = preds_T.detach()
-        l_stu_mx, _ = preds_S.max(dim=1, keepdim=True)
-        l_tea_mx, _ = preds_T.max(dim=1, keepdim=True)
+        
 
-        T_stu = 2 * l_stu_mx / (l_tea_mx + l_stu_mx) * self.tau
-        T_tea = 2 * l_tea_mx / (l_tea_mx + l_stu_mx) * self.tau
-        p_stu = F.log_softmax(l_student / T_stu)
-        p_tea = F.softmax(l_teacher / T_tea)
+        T_stu = tau_scale[1]*self.tau
+        T_tea = tau_scale[0]*self.tau
+        p_stu = F.log_softmax(preds_S / T_stu,dim=1)
+        p_tea = F.softmax(preds_T / T_tea,dim=1)
         # DTKD
-        loss = F.kl_div(p_stu, p_tea, reduction=self.reduction) * T_tea * T_stu
+        loss = F.kl_div(p_stu, p_tea,reduction=self.reduction)* T_tea * T_stu
+        loss = loss.mean() 
         # dtkd_loss = alpha * loss * T_tea * T_stu
-
+        
         # softmax_pred_T = F.softmax(preds_T / (T_tea), dim=1)
         # softmax_preds_S = F.softmax(preds_S / (T_stu), dim=1)
         # loss = ((1.0 * tau_scale*self.tau)**2) * F.kl_div(
