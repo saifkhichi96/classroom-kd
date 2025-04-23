@@ -1,4 +1,7 @@
-efficientnet_pytorch 
+numpy
 torch
 torchvision
 timm
+pillow
+PyYAML
+efficientnet_pytorch

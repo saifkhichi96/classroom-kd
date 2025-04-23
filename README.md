@@ -43,8 +43,8 @@ To train the model, you can use the following command:
 
 ```bash
 python tools/train.py \
-  -c configs/classroom/efficientnet_ablation/1t5p.yaml \
-  --experiment experiments/efficient_ablation/1t5p \
+  -c configs/classroom/mobv2_student/1t5p.yaml \
+  --experiment experiments/mobv2_student/1t5p \
   --model cifar_MobileNetV2 \
   --ask
 ```
@@ -59,7 +59,7 @@ Other options include:
 For **peer pretraining**, use the following command:
 
 ```bash
-python tools/train.py -c configs/classroom/trained_peers/mobv2/0t0p.yaml --model cifar_efficientnetb3 --experiment experiments/efficientnetb3_peer
+python tools/train.py -c configs/classroom/trained_peers/mobv2/0t0p.yaml --model cifar_MobileNetV2 --experiment experiments/mobv2_peer
 ```
 
 To run the ablation study for the number of peers, use the following command:
